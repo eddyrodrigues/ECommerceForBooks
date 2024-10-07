@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+Title "Usuário entra no site e lista todos os livros ativos \nsejam os livros diponíveis ou não para a compra"
+
+rectangle CatalogContext {
+ (Mostra livros do Catálago) as MICAT
+}
+actor Cliente as C
+C --> MICAT : "Busca Catálago"
+@enduml

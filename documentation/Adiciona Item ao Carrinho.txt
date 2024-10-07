@@ -1,0 +1,17 @@
+@startuml
+left to right direction
+Title "Use Case: Adiciona Item ao Carrinho"
+rectangle CatalogContext {
+ (Verifica Estoque) as VE
+}
+rectangle CartContext {
+ (Adiciona Item Carrinho) as AIC
+ '(Mostra livros do Catálago) as MICAT
+}
+actor Cliente as C
+VE ---> C : "Não tem estoque"
+VE -> AIC : Existe Estoque
+AIC --> C : Item Adicionado com Sucesso
+C --> VE : Tem estoque
+'C --> MICAT : "Busca Catálago"
+@enduml

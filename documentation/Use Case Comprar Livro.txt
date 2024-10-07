@@ -1,0 +1,36 @@
+@startuml
+left to right direction
+Title "Use Case: Comprar Livro(s)"
+rectangle CatalogContext {
+ (Verifica Estoque) as VE
+}
+rectangle CartContext {
+ (Criar ordem) as CC
+ (Retirar item do estoque) as RETIRA_ESTOQUE
+ (Adicionar item ao estoque) as ADICIONA_ESTOQUE
+}
+
+rectangle PaymentContext {
+ (Processar Pagamento) as PROC_PAG
+ (E-mail "Pagamento Aprovado" ao Cliente) as PROC_PAG_EFETIVADO
+ (E-mail "Pagamento Não Aprovado" ao Cliente) as PROC_PAG_RECUSADO
+}
+
+rectangle PaymentGateway {
+ (Descontar valor cliente) as PROC_PAG_GATEWAY
+}
+
+actor Cliente as C
+C ---> CC : "Ordem de compra"
+CC -down-> VE : "Verifica estoque dos items do carrinho"
+VE --up-> PROC_PAG : "Processar pagamento"
+PROC_PAG --> RETIRA_ESTOQUE : "Remove item do estoque"
+RETIRA_ESTOQUE --> PROC_PAG_GATEWAY : "Cobrar do cliente"
+PROC_PAG_GATEWAY -up-> ADICIONA_ESTOQUE : "Pagamento recusado"
+ADICIONA_ESTOQUE --> PROC_PAG_RECUSADO
+PROC_PAG_RECUSADO --> C : "E-mail pagamento recusado"
+'PROC_PAG_GATEWAY -down-> C : "Pagamento efetivado"
+PROC_PAG_GATEWAY -up--> PROC_PAG_EFETIVADO : "Pagamento efetivado"
+PROC_PAG_EFETIVADO ---> C : "E-mail Pagamento aprovado"
+VE ---> C : "Algum dos itens não tem estoque"
+@enduml
